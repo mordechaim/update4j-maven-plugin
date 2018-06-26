@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.update4j</groupId>
+	<artifactId>update4j-maven-plugin</artifactId>
+	<version>1.0.0-beta</version>
+	<packaging>maven-plugin</packaging>
+	<name>update4j-mevan-plugin</name>
+	<description>Manages and syncs the configuration between builds</description>
+	<url>https://github.com/update4j/update4j-maven-plugin</url>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Mordechai Meisels</name>
+			<email>mordechai112@gmail.com</email>
+			<organization>update4j</organization>
+			<organizationUrl>http://update4j.org/</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/update4j/update4j-maven-plugin/tree/master</url>
+		<connection>scm:git:https://github.com/update4j/update4j-maven-plugin.git</connection>
+		<developerConnection>scm:git:https://github.com:update4j/update4j-maven-plugin.git</developerConnection>
+	</scm>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>3.5.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-compat</artifactId>
+			<version>3.5.3</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.update4j</groupId>
+			<artifactId>update4j</artifactId>
+			<version>1.0.0-beta.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/update4j-1.0.0-beta.2.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>3.5.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven.plugin-testing</groupId>
+			<artifactId>maven-plugin-testing-harness</artifactId>
+			<version>3.3.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<release>9</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>3.5.2</version>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.update4j</groupId>
+				<artifactId>update4j-maven-plugin</artifactId>
+				<version>1.0.0.-beta</version>
+				<configuration>
+					<configuration>C:/Users/User/Desktop/lib/config.xml</configuration>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>
