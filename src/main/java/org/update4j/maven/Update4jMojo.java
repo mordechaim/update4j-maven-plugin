@@ -15,7 +15,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.update4j.Configuration;
-import org.update4j.binding.ConfigBinding;
 
 @Mojo(name = "sync")
 public class Update4jMojo extends AbstractMojo {
@@ -40,24 +39,30 @@ public class Update4jMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		Configuration config = null;
-		try (Reader in = Files.newBufferedReader(configuration.toPath())) {
-			config = Configuration.read(in);
-		} catch (IOException e) {
-			throw new MojoFailureException("Could not read configuration file: " + configuration, e);
-		}
-		
-		ConfigBinding configBinding = null;
-		try {
-			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-			config.write(new OutputStreamWriter(bytes));
-			configBinding = ConfigBinding.read(new InputStreamReader(new ByteArrayInputStream(bytes.toByteArray())));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
+//		Configuration config = null;
+//		try (Reader in = Files.newBufferedReader(configuration.toPath())) {
+//			config = Configuration.read(in);
+//		} catch (IOException e) {
+//			throw new MojoFailureException("Could not read configuration file: " + configuration, e);
+//		}
+//		
+//		ConfigBinding configBinding = null;
+//		try {
+//			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//			config.write(new OutputStreamWriter(bytes));
+//			configBinding = ConfigBinding.read(new InputStreamReader(new ByteArrayInputStream(bytes.toByteArray())));
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
+//		
 		
 
+		System.out.println("configuration: " + configuration);
+		System.out.println("basePath: " + basePath);
+		System.out.println("keystore: " + keystore);
+		System.out.println("addMissing: " + addMissing);
+		System.out.println("removeUnmatched: " + removeUnmatched);
+		System.out.println("fileFilters: " + fileFilters);
 	}
 
 }
