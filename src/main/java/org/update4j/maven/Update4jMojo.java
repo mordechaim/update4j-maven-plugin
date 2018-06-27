@@ -8,13 +8,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.update4j.Configuration;
+import org.update4j.Library;
+import org.update4j.binding.ConfigBinding;
 
 @Mojo(name = "sync")
 public class Update4jMojo extends AbstractMojo {
@@ -28,41 +33,52 @@ public class Update4jMojo extends AbstractMojo {
 	@Parameter
 	private File keystore;
 
-	@Parameter(defaultValue = "false")
-	private boolean addMissing;
+	//	@Parameter(defaultValue = "false")
+	//	private boolean addMissing;
 
 	@Parameter(defaultValue = "false")
 	private boolean removeUnmatched;
 
-	@Parameter
-	private List<String> fileFilters;
+	//	@Parameter
+	//	private List<String> fileFilters;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-//		Configuration config = null;
-//		try (Reader in = Files.newBufferedReader(configuration.toPath())) {
-//			config = Configuration.read(in);
-//		} catch (IOException e) {
-//			throw new MojoFailureException("Could not read configuration file: " + configuration, e);
-//		}
-//		
-//		ConfigBinding configBinding = null;
-//		try {
-//			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//			config.write(new OutputStreamWriter(bytes));
-//			configBinding = ConfigBinding.read(new InputStreamReader(new ByteArrayInputStream(bytes.toByteArray())));
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		}
-//		
-		
+		if (configuration == null) {
+			throw new MojoFailureException("'configuration' field is missing.");
+		}
 
-		System.out.println("configuration: " + configuration);
-		System.out.println("basePath: " + basePath);
-		System.out.println("keystore: " + keystore);
-		System.out.println("addMissing: " + addMissing);
-		System.out.println("removeUnmatched: " + removeUnmatched);
-		System.out.println("fileFilters: " + fileFilters);
+		Configuration config = null;
+		try (Reader in = Files.newBufferedReader(configuration.toPath())) {
+			config = Configuration.read(in);
+		} catch (IOException e) {
+			throw new MojoFailureException("Could not read configuration file: " + configuration, e);
+		}
+
+		ConfigBinding configBinding = null;
+		try {
+			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			config.write(new OutputStreamWriter(bytes));
+			configBinding = ConfigBinding.read(new InputStreamReader(new ByteArrayInputStream(bytes.toByteArray())));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		Path base;
+		if (basePath == null) {
+			base = config.getBasePath();
+		} else {
+			base = basePath.toPath();
+		}
+
+		for (Library lib : config.getLibraries()) {
+			Path p = base.resolve(config.getBasePath().relativize(lib.getPath()));
+
+			if (removeUnmatched && Files.notExists(p)) {
+				configBinding.libraries
+								.removeIf(libBinding -> Long.parseLong(libBinding.checksum, 16) == lib.getChecksum());
+			}
+		}
 	}
 
 }
